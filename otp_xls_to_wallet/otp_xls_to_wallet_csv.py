@@ -8,6 +8,11 @@ file_list = [f for f in os.listdir(xls_path) if ".xls" in f]
 print (file_list)
 
 actual_table = ""
+prefix = input("Ki vagy?: ")
+if prefix:
+    prefix+="_"
+else:
+    prefix=""
 for file_name in file_list:
     df = pd.read_html(xls_path+file_name)
     for i,table in enumerate(df):
@@ -23,7 +28,7 @@ for file_name in file_list:
                 table.drop(["Közlemény", "Banki tranzakció azonosító","Ellenoldali számlaszám"], axis=1, inplace=True)
                 table["Date"] = pd.to_datetime(table["Date"],format='%Y.%m.%d. %H:%M:%S')
                 table["Date"] = table["Date"].dt.strftime("%d/%m/%Y %H:%M:%S")
-                csv_name = "Mate_"+file_name.split('.')[0]+".csv"
+                csv_name = prefix+file_name.split('.')[0]+".csv"
                 print("{0} fájl mentése...".format(csv_name))
                 table.to_csv(output_path+csv_name,sep=';',encoding='utf-8-sig',index=False, na_rep=None)
         except Exception as e:
