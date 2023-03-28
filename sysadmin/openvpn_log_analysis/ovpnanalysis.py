@@ -1,8 +1,10 @@
-import os
-import gzip
-import re
 from datetime import datetime
+import glob
+import gzip
 import pandas as pd
+import re
+import os
+
 def extract_logs(folder_path):
     for filename in os.listdir(folder_path):
         if filename.endswith('.gz'):
@@ -16,7 +18,6 @@ def extract_logs(folder_path):
                     f_out.write(f_in.read())
             os.remove(os.path.join(folder_path, filename))
 def load_log_files(folder_path):
-    import glob
     log_files = glob.glob(folder_path+"*.log*")
     logs = []
     for file in log_files:
@@ -57,8 +58,6 @@ for row in logs:
 df = pd.DataFrame(data, columns=['status', 'datetime', 'ip', 'user'])
 df['datetime'] = pd.to_datetime(df['datetime'])
 df.sort_values(by=['datetime'], inplace=True)
-df.to_csv('openvpn.csv', index=False)
-df.to_excel('openvpn.xlsx', index=False)
 
 # Below two functions wer also written by GPT-4!
 def calculate_session_length(group):
@@ -82,6 +81,6 @@ def format_session_length(td):
 
 df = df.groupby(['user']).apply(calculate_session_length)
 df['session_length'] = df['session_length'].apply(lambda x: format_session_length(x) if pd.notnull(x) else x)
-df.to_csv('openvpn_session_length.csv', index=False)
+df.to_excel('openvpn_session_length.csv', index=False)
 
 print("Done")
