@@ -1,0 +1,6 @@
+otp_xls_to_wallet/csv
+otp_xls_to_wallet/xls
+sysadmin/230327_openvpnanalysis/openvpn
+.idea
+.env
+*.ics
