@@ -4,6 +4,7 @@ import pickle
 from copy import deepcopy
 import streamlit as st
 import os
+import dotenv
 def get_path_filename(filename):
     return os.path.normpath(os.path.dirname(os.path.realpath(__file__))) + '/' + filename
 
@@ -38,7 +39,7 @@ def get_pos(cities):
     if not full_ref:
         return pickle.load(open(get_path_filename('cords.p'),'rb'))
 
-    api_key = "56c6dc0395a8dd1b495a8ad034932e3e"
+    api_key = dotenv.dotenv_values('.env')['API_KEY']
     lats = []
     lons = []
     for city in cities:
@@ -57,6 +58,12 @@ def get_pos(cities):
     return cords
 
 full_ref = False
+
+if not os.path.exists(get_path_filename('cities.p'))\
+or not os.path.exists(get_path_filename('cords.p')):
+    full_ref = True
+
+
 cities = get_cities()
 cords = get_pos(cities)
 
