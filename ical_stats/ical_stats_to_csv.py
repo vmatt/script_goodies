@@ -5,21 +5,23 @@ import requests
 import calendar
 import dotenv
 
-print()
+
 def contains(txt,word_list):
     for word in word_list:
         if word in txt:
             return True
     return False
-# g = open('reachcalendar.ics','rb')
-# gcal = Calendar.from_ical(g.read())
-year = int(input("Enter year: "))
-month = int(input("Enter month (01-12): "))
+url = dotenv.dotenv_values('.env')['CAL_URL']
+ignored_events = dotenv.dotenv_values('.env')['IGNORED_EVENTS'].split(',')
+ignored_events = [x.strip().strip("'") for x in ignored_events]
+year = int(input("Enter year (press enter to current year): ") or datetime.now().year)
+month = int(input("Enter month (01-12) (press enter to current year): ") or datetime.now().month)
 end_day = calendar.monthrange(year, month)[1]
 print()
-url = dotenv.dotenv_values('.env')['CAL_URL']
+
 gcal = Calendar.from_ical(requests.get(url).text)
 events_dict = {}
+
 for component in gcal.walk():
     title = component.get('SUMMARY')
     if not title:
@@ -37,7 +39,7 @@ for component in gcal.walk():
             duration = end_ts - start_ts
             duration_hours = round(duration.total_seconds()/60/60,2)
             duration_hours = float(duration_hours)
-            if not contains(title, ['Canceled:', 'Optional:', 'Lunch','Private Appointment', 'Quarterly Business Discussion']):
+            if not contains(title, ignored_events):
                 try:
                     events_dict[title]+= duration_hours
                 except KeyError:

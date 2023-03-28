@@ -7,6 +7,7 @@ It can be useful if you want to get a report of your monthly calls and meetings.
 2. Set your .ics URL in the .env file
 ```bash
 CAL_URL=https://your.ics.url
+IGNORED_EVENTS="comma,separated,list,of,event,names,to,ignore"
 ```
 3. Run the script
 4. Type the year and month you want to get the report for.
