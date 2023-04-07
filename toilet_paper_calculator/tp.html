@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World's First AI developed Toilet Paper Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+          }
+
+          body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            flex: 1;
+          }
+        footer {
+            width: 100%;
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+          }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5">World's First AI-powered Toilet Paper Calculator</h1>
+    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addBrandModal">Add brand</button>
+
+    <table class="table mt-4">
+      <thead>
+        <tr>
+          <th>Brand Name</th>
+          <th>Comfort Level</th>
+          <th>Price per Sheet</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="brandTable">
+      </tbody>
+    </table>
+<footer class="mt-5">
+  <p class="text-center">2023 Mate Valko<br>
+  <i>Proudly written by GPT-4, the next generation of advanced AI language models, designed to provide users with natural language understanding and generation capabilities. GPT-4 is committed to empowering creators and developers like Mate Valko to build innovative applications and solutions that harness the power of artificial intelligence.</i>
+    <br><a href="https://creativecommons.org/licenses/by/2.0/">CC-BY</a></p>
+</footer>
+  </div>
+
+  <!-- Add Brand Modal -->
+  <div class="modal" tabindex="-1" id="addBrandModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Brand</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addBrandForm">
+            <div class="mb-3">
+              <label for="brandName" class="form-label">Brand Name</label>
+              <input type="text" class="form-control" id="brandName" required>
+            </div>
+            <div class="mb-3">
+              <label for="rollsPerPack" class="form-label">Rolls per Pack</label>
+              <input type="number" class="form-control" id="rollsPerPack" required>
+            </div>
+            <div class="mb-3">
+              <label for="sheetsPerRoll" class="form-label">Sheets per Roll</label>
+              <input type="number" class="form-control" id="sheetsPerRoll" required>
+            </div>
+            <div class="mb-3">
+              <label for="numLayers" class="form-label">Number of Layers</label>
+              <input type="number" class="form-control" id="numLayers" required>
+            </div>
+            <div class="mb-3">
+              <label for="packCost" class="form-label">Pack Cost</label>
+              <input type="number" step="0.01" class="form-control" id="packCost" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="saveBrand">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
+
+  <script>
+    function comfort(n) {
+      n = parseFloat(n);
+      return n > 2 ? 2.5 + (0.5 * (1 - Math.pow(0.5, n - 3))) : n;
+    }
+
+    function calculatePricePerSheet(rollsPerPack, sheetsPerRoll, numLayers, packCost) {
+      const comfortLevel = comfort(numLayers);
+      return packCost / (rollsPerPack * sheetsPerRoll * comfortLevel);
+    }
+
+    let brands = JSON.parse(localStorage.getItem('brands')) || {};
+
+    function addBrandToTable(id, brand) {
+      const newRow = `<tr data-id="${id}">
+        <td>${brand.name}</td>
+        <td>${brand.comfort.toFixed(2)}</td>
+        <td>${brand.pricePerSheet.toFixed(4)}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-2">Edit</button>
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>`;
+
+      const rows = $('#brandTable').find('tr');
+      let inserted = false;
+
+      rows.each(function () {
+        const rowPricePerSheet = parseFloat($(this).find('td:nth-child(3)').text());
+
+        if (brand.pricePerSheet < rowPricePerSheet) {
+          $(this).before(newRow);
+          inserted = true;
+          return false;
+        }
+      });
+
+      if (!inserted) {
+        $('#brandTable').append(newRow);
+      }
+    }
+
+    const sortedBrandIds = Object.keys(brands).sort((a, b) => brands[b].pricePerSheet - brands[a].pricePerSheet);
+    sortedBrandIds.forEach(id => addBrandToTable(id, brands[id]));
+
+
+    $('#saveBrand').on('click', function () {
+      const brandName = $('#brandName').val();
+      const rollsPerPack = $('#rollsPerPack').val();
+      const sheetsPerRoll = $('#sheetsPerRoll').val();
+      const numLayers = $('#numLayers').val();
+      const packCost = $('#packCost').val();
+
+      const comfortLevel = comfort(numLayers);
+      const pricePerSheet = calculatePricePerSheet(rollsPerPack, sheetsPerRoll, numLayers, packCost);
+
+      const id = new Date().getTime();
+
+      const brand = {
+        id: id,
+        name: brandName,
+        rollsPerPack: rollsPerPack,
+        sheetsPerRoll: sheetsPerRoll,
+        numLayers: numLayers,
+        packCost: packCost,
+        comfort: comfortLevel,
+        pricePerSheet: pricePerSheet
+      };
+
+      brands[id] = brand;
+      localStorage.setItem('brands', JSON.stringify(brands));
+
+      addBrandToTable(id, brand);
+
+      $('#addBrandForm')[0].reset();
+      $('#addBrandModal').modal('hide');
+    });
+
+
+     $('#brandTable').on('click', '.btn-warning', function () {
+      // Get the row data
+      const row = $(this).closest('tr');
+      const id = row.data('id');
+      const brand = brands[id];
+
+      // Populate the modal with the row data
+      $('#brandName').val(brand.name);
+      $('#rollsPerPack').val(brand.rollsPerPack);
+      $('#sheetsPerRoll').val(brand.sheetsPerRoll);
+      $('#numLayers').val(brand.numLayers);
+      $('#packCost').val(brand.packCost);
+
+      // Set the save button to update the row on click
+      $('#saveBrand').off('click').on('click', function () {
+        const newBrandName = $('#brandName').val();
+        const newRollsPerPack = $('#rollsPerPack').val();
+        const newSheetsPerRoll = $('#sheetsPerRoll').val();
+        const newNumLayers = $('#numLayers').val();
+        const newPackCost = $('#packCost').val();
+
+        const newComfortLevel = comfort(newNumLayers);
+        const newPricePerSheet = calculatePricePerSheet(newRollsPerPack, newSheetsPerRoll, newNumLayers, newPackCost);
+        brand.name = newBrandName;
+        brand.rollsPerPack = newRollsPerPack;
+        brand.sheetsPerRoll = newSheetsPerRoll;
+        brand.numLayers = newNumLayers;
+        brand.packCost = newPackCost;
+        brand.comfort = newComfortLevel;
+        brand.pricePerSheet = newPricePerSheet;
+
+        localStorage.setItem('brands', JSON.stringify(brands));
+        // Update the row data
+        row.find('td:nth-child(1)').text(newBrandName);
+        row.find('td:nth-child(2)').text(newComfortLevel.toFixed(2));
+        row.find('td:nth-child(3)').text(newPricePerSheet.toFixed(4));
+        row.data('rollsPerPack', newRollsPerPack);
+        row.data('sheetsPerRoll', newSheetsPerRoll);
+        row.data('numLayers', newNumLayers);
+        row.data('packCost', newPackCost);
+
+        // Reset the form and close the modal
+        $('#addBrandForm')[0].reset();
+        $('#addBrandModal').modal('hide');
+
+      });
+
+      // Open the modal
+      $('#addBrandModal').modal('show');
+    });
+
+     $('#brandTable').on('click', '.btn-danger', function () {
+      const row = $(this).closest('tr');
+      const id = row.data('id');
+
+      // Remove the brand from the brands dictionary and local storage
+      delete brands[id];
+      localStorage.setItem('brands', JSON.stringify(brands));
+
+      row.remove();
+    });
+
+  </script>
+</body>
+</html>

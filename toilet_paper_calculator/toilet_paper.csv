@@ -1,0 +1,5 @@
+rolls_per_pack,sheets_per_roll,pack_cost,num_layers
+16,100,1300,1
+10,150,1500,2
+16,100,1500,2
+8,200,1800,3
