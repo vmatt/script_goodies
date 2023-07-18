@@ -81,6 +81,6 @@ def format_session_length(td):
 
 df = df.groupby(['user']).apply(calculate_session_length)
 df['session_length'] = df['session_length'].apply(lambda x: format_session_length(x) if pd.notnull(x) else x)
-df.to_excel('openvpn_session_length.csv', index=False)
+df.to_csv('openvpn_session_length.csv', index=False)
 
 print("Done")

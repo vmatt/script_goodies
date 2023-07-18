@@ -15,7 +15,7 @@ url = dotenv.dotenv_values('.env')['CAL_URL']
 ignored_events = dotenv.dotenv_values('.env')['IGNORED_EVENTS'].split(',')
 ignored_events = [x.strip().strip("'") for x in ignored_events]
 year = int(input("Enter year (press enter to current year): ") or datetime.now().year)
-month = int(input("Enter month (01-12) (press enter to current year): ") or datetime.now().month)
+month = int(input("Enter month (01-12) (press enter to current month): ") or datetime.now().month)
 end_day = calendar.monthrange(year, month)[1]
 print()
 
@@ -50,7 +50,7 @@ total_hours = sum(events_dict.values())
 
 # events_dict = sorted(events_dict.items(), key=lambda x:x[1])
 for event_name,hours in events_dict.items():
-    print(f" - {event_name} - {hours} hours")
+    print(f"{event_name} - {hours} hours")
 print(f" Summed hours: {total_hours}")
 
 
