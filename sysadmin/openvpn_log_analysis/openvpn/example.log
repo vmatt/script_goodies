@@ -1,6 +1,0 @@
-Fri Mar 24 18:21:51 2023 10.0.0.1:56870 [User1] Peer Connection Initiated with [AF_INET]10.0.0.1:56870 (via [AF_INET]192.168.1.2%ens18)
-Fri Mar 24 18:23:28 2023 User1/10.0.0.1:56870 SIGTERM[soft,remote-exit] received, client-instance exiting
-Fri Mar 24 20:37:47 2023 10.0.0.2:62538 [User2] Peer Connection Initiated with [AF_INET]10.0.0.2:62538 (via [AF_INET]192.168.1.2%ens18)
-Fri Mar 24 21:25:31 2023 User2/10.0.0.2:62538 SIGUSR1[soft,ping-restart] received, client-instance restarting
-Sun Mar 26 14:51:27 2023 10.0.0.3:60418 [User3] Peer Connection Initiated with [AF_INET]10.0.0.3:60418 (via [AF_INET]192.168.1.2%ens18)
-Fri Mar 24 18:23:28 2023 User3/10.0.0.3:60418 SIGTERM[soft,remote-exit] received, client-instance exiting
