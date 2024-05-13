@@ -44,7 +44,7 @@ class PDF(FPDF):
 # Parameters
 columns = 4
 column_width = 10
-row_count = 24
+row_count = 5
 ranges = [(1000, 9999), (10, 99), (10, 99), (10, 99)]
 
 # Create instance of PDF class with custom parameters
@@ -61,7 +61,7 @@ max_tables_per_row = page_width // (columns * column_width + 10)
 max_rows_per_page = page_height // (table_height + 10)
 
 # Add pages and tables
-tables_needed = 6
+tables_needed = 4
 tables_added = 0
 
 while tables_added < tables_needed:

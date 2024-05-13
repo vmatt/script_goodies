@@ -10,7 +10,7 @@ def get_path_filename(filename):
 
 def get_cities():
     if not full_ref:
-        return pickle.load(open(get_path_filename('cities.p'),'rb'))
+        return pickle.load(open(get_path_filename('cities.p'), 'rb'))
     page = 1
     cities = []
     while page != 10:
@@ -31,13 +31,13 @@ def get_cities():
             cities.remove(city)
             for sub_city in sub_cities:
                 cities.update([sub_city])
-    pickle.dump(cities,open(get_path_filename('cities.p'),'wb'))
+    pickle.dump(cities, open(get_path_filename('cities.p'), 'wb'))
     return cities
 
 
 def get_pos(cities):
     if not full_ref:
-        return pickle.load(open(get_path_filename('cords.p'),'rb'))
+        return pickle.load(open(get_path_filename('cords.p'), 'rb'))
 
     api_key = dotenv.dotenv_values('.env')['API_KEY']
     lats = []
@@ -54,7 +54,7 @@ def get_pos(cities):
     cords = {'lat': lats,
             'lon': lons}
     print(city,cords)
-    pickle.dump(cords,open(get_path_filename('cords.p'),'wb'))
+    pickle.dump(cords, open(get_path_filename('cords.p'), 'wb'))
     return cords
 
 full_ref = False
