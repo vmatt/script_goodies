@@ -1,0 +1,6 @@
+data_processing/xls_converter/csv
+data_processing/xls_converter/xls
+sysadmin/openvpn_log_analysis/openvpn
+.idea
+.env
+*.ics
